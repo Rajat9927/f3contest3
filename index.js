@@ -9,7 +9,7 @@ form.addEventListener('submit', e => {
 
     validateInputs();
 });
-
+let arr = [];
 const setError = (element, message) => {
     const inputControl = element.parentElement;
     const errorDisplay = inputControl.querySelector('.error');
@@ -39,36 +39,62 @@ const validateInputs = () => {
     const passwordValue = password.value.trim();
     const password2Value = password2.value.trim();
 
-    if(usernameValue === '') {
+    if (usernameValue === '') {
         setError(username, 'Username is required');
-    } else if (usernameValue.length < 2 ) {
+    } else if (usernameValue.length < 2) {
         setError(username, 'Password must be at least 8 character.')
     } else {
         setSuccess(username);
+        arr['name'] = usernameValue;
+        localStorage.setItem("name", usernameValue);
+        var checkname = "done";
     }
-    
-    if(emailValue === '') {
+
+    if (emailValue === '') {
         setError(email, 'Email is required');
     } else if (!isValidEmail(emailValue)) {
         setError(email, 'Provide a valid email address');
     } else {
         setSuccess(email);
+        arr['email'] = emailValue;
+        var checkemail = "done";
     }
 
-    if(passwordValue === '') {
+    if (passwordValue === '') {
         setError(password, 'Password is required');
-    } else if (passwordValue.length < 8 ) {
+    } else if (passwordValue.length < 8) {
         setError(password, 'Password must be at least 8 character.')
     } else {
         setSuccess(password);
     }
 
-    if(password2Value === '') {
+    if (password2Value === '') {
         setError(password2, 'Please confirm your password');
     } else if (password2Value !== passwordValue) {
         setError(password2, "Passwords doesn't match");
     } else {
+        var checkpass = "done";
         setSuccess(password2);
+        arr['password'] = password2Value;
+        localStorage.setItem("password", password2Value);
+        console.log(arr);
+
+    }
+    if ((checkpass == "done" && checkname == "done")) {
+        alert("Teacher Registered");
+        let obj = { usernameValue, emailValue, password2Value }
+    
+            let temp = JSON.parse(localStorage.getItem("data"));
+            console.log(temp);
+            if (temp) {
+                arr = [...temp]
+            }
+            arr.push(obj)
+            localStorage.setItem("data", JSON.stringify(arr));
+            window.location.href = "login.html";
     }
 
+
 };
+
+
